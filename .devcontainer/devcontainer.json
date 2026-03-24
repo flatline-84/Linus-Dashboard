@@ -11,15 +11,7 @@
     "ghcr.io/devcontainers/features/github-cli:1": {}
   },
 
-  "mounts": [
-    {
-      "source": "${localWorkspaceFolder}/../sapiens",
-      "target": "/workspaces/sapiens",
-      "type": "bind"
-    }
-  ],
-
-  "onCreateCommand": [
+"onCreateCommand": [
     "bash", "-c",
     "rm -rf ha-env && uv venv ha-env && uv pip install --python ha-env/bin/python -r requirements.txt && npm install"
   ],

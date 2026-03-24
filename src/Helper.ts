@@ -637,14 +637,18 @@ class Helper {
 
     const [entities, devices, areas, floors, labelsList, entity_component_icons, services_icons, linus_dashboard_config] = homeAssistantRegistries as [any[], any[], any[], any[], any[], { resources: any }, { resources: any }, LinusDashboardConfig];
 
-    // Preserve HA ordering: the array index returned by config/area_registry/list and
-    // config/floor_registry/list reflects the user-defined order (drag & drop in HA Settings).
-    // Assign it to the `order` field so the existing sort logic uses it correctly.
+    // Preserve HA ordering: in HA 2025.1+ each area/floor object has a native `order` field
+    // reflecting the user-defined drag & drop order. Use it directly when present, and fall back
+    // to the array index for older HA versions that don't include the `order` property.
     areas.forEach((area: any, index: number) => {
-      area.order = index;
+      if (area.order === undefined || area.order === null) {
+        area.order = index;
+      }
     });
     floors.forEach((floor: any, index: number) => {
-      floor.order = index;
+      if (floor.order === undefined || floor.order === null) {
+        floor.order = index;
+      }
     });
 
     this.#icons = merge(entity_component_icons.resources, services_icons.resources);
